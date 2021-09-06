@@ -50,7 +50,7 @@ GET http://localhost:3000/selected/?offset=0&limit=10&order=ASC&select=cured
 Authorization: Header eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhaGl0aDIzIiwiaWF0IjoxNjMwODI3OTMzfQ.uK_D93LcAKL5vqTYl-V3d2XHkmg0xMe-_w-2dLvM3hA
 
 ###
-
+//searching states by sending request through body
 GET http://localhost:3000/searchStates/
 Authorization: Header eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhaGl0aDIzIiwiaWF0IjoxNjMwODI3OTMzfQ.uK_D93LcAKL5vqTYl-V3d2XHkmg0xMe-_w-2dLvM3hA
 Content-Type: application/json
@@ -60,7 +60,7 @@ Content-Type: application/json
 }
 
 ###
-
+//searching district by sending request through body
 GET http://localhost:3000/searchDistrict/
 Authorization: Header eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhaGl0aDIzIiwiaWF0IjoxNjMwODI3OTMzfQ.uK_D93LcAKL5vqTYl-V3d2XHkmg0xMe-_w-2dLvM3hA
 Content-Type: application/json

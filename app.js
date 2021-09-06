@@ -194,7 +194,7 @@ app.get("/selected/", authenticateToken, async (request, response) => {
   response.send(selectedCases);
 });
 
-//searching states through body
+//searching states by sending request through body
 
 app.get("/searchStates/", authenticateToken, async (request, response) => {
   const { stateName } = request.body;
@@ -211,7 +211,7 @@ app.get("/searchStates/", authenticateToken, async (request, response) => {
   response.send(array);
 });
 
-//searching district through body
+//searching district by sending request through body
 
 app.get("/searchDistrict/", authenticateToken, async (request, response) => {
   const { districtName } = request.body;
