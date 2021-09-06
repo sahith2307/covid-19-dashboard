@@ -38,11 +38,6 @@ GET http://localhost:3000/cured/
 Authorization: Header eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhaGl0aDIzIiwiaWF0IjoxNjMwODI3OTMzfQ.uK_D93LcAKL5vqTYl-V3d2XHkmg0xMe-_w-2dLvM3hA
 ###
 
-GET http://localhost:3000/books/
-
-
-###
-
 //get the data of selected type of cases select=(cured,active,cases) 
 //we can get which state has orderby=DESC(top cases) and ASC(least cases)
 //we can set limit and offset
@@ -68,3 +63,8 @@ Content-Type: application/json
 {
     "districtName":"krishna"
 }
+
+###
+//get data by stateId 
+GET http://localhost:3000/states/1/
+Authorization: Header eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhaGl0aDIzIiwiaWF0IjoxNjMwODI3OTMzfQ.uK_D93LcAKL5vqTYl-V3d2XHkmg0xMe-_w-2dLvM3hA

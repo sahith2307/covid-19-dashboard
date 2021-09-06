@@ -31,20 +31,9 @@ const initializeDbAndServer = async () => {
 
 initializeDbAndServer();
 
-app.get("/books/", async (request, response) => {
-  const getBooksQuery = `
-    SELECT
-      SUM(cured) AS curedCases,SUM(active) AS activeCases,SUM(cases) AS totalCases,state.state_name
-    FROM
-      state INNER JOIN district ON state.state_id=district.state_id
-   GROUP BY
-        state.state_id
-    ORDER BY totalCases DESC;`;
-  const booksArray = await db.all(getBooksQuery);
-  response.send(booksArray);
-});
-
-// signup user
+/* signup user 
+if user exists it will send response that user already exits
+if not sending response Created new user with id and username is username*/
 
 app.post("/signupUser/", async (request, response) => {
   const { username, name, password, gender, location } = request.body;
@@ -65,14 +54,18 @@ app.post("/signupUser/", async (request, response) => {
         )`;
     const dbResponse = await db.run(createUser);
     const newUserId = dbResponse.lastID;
-    response.send(`Created new user with ${newUserId}`);
+    response.send(
+      `Created new user with ${newUserId} and username is ${username}`
+    );
   } else {
     response.status = 400;
-    response.send("User already exists");
+    response.send("Username already exists");
   }
 });
 
-//login the user and get jwt token
+/*login the user and get jwt token 
+if user not exits sending response you're not registered
+if password is incorrect sending response Invalid password*/
 
 app.post("/login/", async (request, response) => {
   const { username, password } = request.body;
@@ -96,7 +89,7 @@ app.post("/login/", async (request, response) => {
   }
 });
 
-// Middleware Function
+// Middleware Function it is used for authorization access the data
 
 function authenticateToken(request, response, next) {
   let jwtToken;
@@ -119,34 +112,19 @@ function authenticateToken(request, response, next) {
   }
 }
 
-app.get("/searchStates/", authenticateToken, async (request, response) => {
-  const { stateName } = request.body;
-  const getStates = `
-    SELECT
-      state.state_name AS stateName,SUM(cured) AS curedCases,SUM(active) AS activeCases,SUM(cases) AS totalCases
-    FROM
-      state INNER JOIN district ON state.state_id=district.state_id
-    WHERE state.state_name like '%${stateName}%'
-   GROUP BY
-        state.state_id
-    ORDER BY totalCases DESC;`;
-  const array = await db.all(getStates);
-  response.send(array);
-});
-
-// cured cases
+// total cured cases in India
 
 app.get("/cured/", authenticateToken, async (request, response) => {
   const getStates = `
     SELECT
-      SUM(cured) AS curedCases
+      SUM(cured) AS totalCuredCases
     FROM
       district;`;
   const array = await db.get(getStates);
   response.send(array);
 });
 
-//total cases
+//total cases in India
 
 app.get("/totalCases/", authenticateToken, async (request, response) => {
   const getStates = `
@@ -158,7 +136,7 @@ app.get("/totalCases/", authenticateToken, async (request, response) => {
   response.send(array);
 });
 
-// active Cases
+//total active Cases in India
 
 app.get("/activeCases/", authenticateToken, async (request, response) => {
   const getStates = `
@@ -226,6 +204,20 @@ app.get("/searchDistrict/", authenticateToken, async (request, response) => {
     ORDER BY stateName DESC;`;
   const array = await db.all(getStates);
   response.send(array);
+});
+
+/*get the data of state from stateId 
+get stateId from parameters */
+app.get("/states/:stateId/", authenticateToken, async (request, response) => {
+  const { stateId } = request.params;
+  const getStateById = `
+     SELECT
+      state.state_name AS stateName,SUM(cured) AS curedCases,SUM(active) AS activeCases,SUM(cases) AS totalCases
+    FROM
+      state INNER JOIN district ON state.state_id=district.state_id
+    WHERE state.state_id=${stateId};`;
+  const state = await db.get(getStateById);
+  response.send(state);
 });
 
 module.exports = app;
